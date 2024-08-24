@@ -1,0 +1,25 @@
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #f0f0f0;
+    padding: 1rem;
+  }
+  
+  .nav {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .nav li {
+    margin-bottom: 1rem;
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .nav a:hover {
+    color: #0070f3;
+  }
+  

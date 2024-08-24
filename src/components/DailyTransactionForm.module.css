@@ -1,0 +1,50 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .marketForm {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .expenseForm {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .removeButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .addButton {
+    background-color: #52c41a;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+  
+  .submitButton {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
