@@ -1,23 +1,24 @@
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+  gap: 2rem; /* Space between the forms */
+  max-width: 1600px;
+  margin: 0;
   padding: 2rem;
   background-color: #f0f2f5;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0;
 }
 
 .marketForm {
+  position: relative; /* Make the market form container a positioned element */
   background-color: white;
   border: 1px solid #e8e8e8;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
+  width: 100%; /* Ensure full width within the grid column */
+  box-sizing: border-box; /* Include padding and border in the element's width and height */
 }
 
 .marketForm:hover {
@@ -32,7 +33,7 @@
 }
 
 .input {
-  width: 97.%;
+  width: 95%;
   padding: 0.75rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -55,30 +56,12 @@
   align-items: center;
 }
 
-.addButton {
+.addButton, .removeButton, .submitButton {
   padding: 0.5rem 1rem;
-  border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
-}
-
-.removeButton {
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-  padding: 0.5rem 1rem;
-  min-width: 120px; /* Ensures the button is wide enough for 10 characters */
-  white-space: nowrap; /* Prevents text from wrapping */
-}
-
-.removeButton:hover {
-  background-color: #ff7875;
 }
 
 .addButton {
@@ -89,6 +72,17 @@
 
 .addButton:hover {
   background-color: #73d13d;
+}
+
+.removeButton {
+  background-color: #ff4d4f;
+  color: white;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.removeButton:hover {
+  background-color: #ff7875;
 }
 
 .submitButton {
@@ -106,4 +100,51 @@
 
 .submitButton:hover {
   background-color: #40a9ff;
+}
+
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #474646;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #777777;
+  transition: 100ms;
+}
+
+.loadingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f0f2f5;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1890ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Stack forms on smaller screens */
+@media (max-width: 1000px) {
+  .form {
+    grid-template-columns: 1fr; /* Single column on small screens */
+  }
 }
