@@ -1,4 +1,5 @@
 import { Expense } from '@/core/entities/Expense';
+import { CreateDailyTransaction } from '@/core/interface/create-daily-transaction.interface';
 import { ExpenseRepository } from '@/core/use-cases/expenseUseCases';
 import { supabase } from '@/infrastructure/database/supabase';
 
@@ -15,10 +16,19 @@ export class SupabaseExpenseRepository implements ExpenseRepository {
     return data as Expense | null;
   }
 
-  async create(expense: Omit<Expense, 'id'>): Promise<Expense> {
-    const { data, error } = await supabase.from('Expense').insert(expense).single();
-    if (error) throw error;
-    return data as Expense;
+  async create(req: CreateDailyTransaction): Promise<any> {
+    const { expense } = req;
+    try {
+      const { data, error } = await supabase.from('Expense').upsert(expense).select();
+      if (error) throw error;
+      return {
+        status: 200,
+        expenseData: data
+      };
+    } catch (error) {
+      console.log('error', error);
+      throw new Error('Failed to create expense(s).');
+    }
   }
 
   async update(id: number, expense: Partial<Expense>): Promise<Expense> {

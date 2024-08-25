@@ -1,9 +1,10 @@
 import { Expense } from '../entities/Expense';
+import { CreateDailyTransaction } from '../interface/create-daily-transaction.interface';
 
 export interface ExpenseRepository {
   getAll(): Promise<Expense[]>;
   getById(id: number): Promise<Expense | null>;
-  create(expense: Omit<Expense, 'id'>): Promise<Expense>;
+  create(req: CreateDailyTransaction): Promise<Expense>;
   update(id: number, expense: Partial<Expense>): Promise<Expense>;
   delete(id: number): Promise<void>;
 }
@@ -19,8 +20,8 @@ export class ExpenseUseCases {
     return this.repository.getById(id);
   }
 
-  async createExpense(expense: Omit<Expense, 'id'>): Promise<Expense> {
-    return this.repository.create(expense);
+  async createExpense(req: CreateDailyTransaction): Promise<Expense> {
+    return this.repository.create(req);
   }
 
   async updateExpense(id: number, expense: Partial<Expense>): Promise<Expense> {

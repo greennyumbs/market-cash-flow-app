@@ -1,17 +1,21 @@
 // src/app/daily-transaction/page.tsx
-import { MarketUseCases } from '@/core/use-cases/marketUseCases'
-import { SupabaseMarketRepository } from '@/data/repositories/MarketRepository'
+import { Market } from '@/core/entities/Market'
 import DailyTransactionForm from '@/components/DailyTransactionForm'
 
-const marketRepository = new SupabaseMarketRepository()
-const marketUseCases = new MarketUseCases(marketRepository)
+async function getMarkets(): Promise<Market[]> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/market`, { cache: 'no-store' })
+  if (!response.ok) {
+    throw new Error('Failed to fetch markets')
+  }
+  return response.json()
+}
 
 export default async function DailyTransaction() {
-  const markets = await marketUseCases.getAllMarkets()
+  const markets = await getMarkets()
 
   return (
     <div>
-      <h1>Daily Transaction</h1>
+      <h1>รายจ่ายวันนี้</h1>
       <DailyTransactionForm markets={markets} />
     </div>
   )

@@ -1,9 +1,10 @@
 import { Transaction } from '../entities/Transaction';
+import { CreateDailyTransaction } from '../interface/create-daily-transaction.interface';
 
 export interface TransactionRepository {
   getAll(): Promise<Transaction[]>;
   getById(id: number): Promise<Transaction | null>;
-  create(transaction: Omit<Transaction, 'id'>): Promise<Transaction>;
+  create(req: CreateDailyTransaction): Promise<Transaction>;
   update(id: number, transaction: Partial<Transaction>): Promise<Transaction>;
   delete(id: number): Promise<void>;
 }
@@ -19,8 +20,8 @@ export class TransactionUseCases {
     return this.repository.getById(id);
   }
 
-  async createTransaction(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
-    return this.repository.create(transaction);
+  async createTransaction(req: CreateDailyTransaction): Promise<Transaction> {
+    return this.repository.create(req);
   }
 
   async updateTransaction(id: number, transaction: Partial<Transaction>): Promise<Transaction> {

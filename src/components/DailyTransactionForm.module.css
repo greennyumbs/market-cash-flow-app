@@ -1,50 +1,109 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .marketForm {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 4px;
-  }
-  
-  .input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .expenseForm {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .removeButton {
-    background-color: #ff4d4f;
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .addButton {
-    background-color: #52c41a;
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    margin-top: 0.5rem;
-  }
-  
-  .submitButton {
-    background-color: #1890ff;
-    color: white;
-    border: none;
-    padding: 1rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+
+.marketForm {
+  background-color: white;
+  border: 1px solid #e8e8e8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.marketForm:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.marketForm h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #1890ff;
+  font-size: 1.2rem;
+}
+
+.input {
+  width: 97.%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.expenseForm {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.addButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.removeButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  padding: 0.5rem 1rem;
+  min-width: 120px; /* Ensures the button is wide enough for 10 characters */
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.removeButton:hover {
+  background-color: #ff7875;
+}
+
+.addButton {
+  background-color: #52c41a;
+  color: white;
+  margin-top: 0.5rem;
+}
+
+.addButton:hover {
+  background-color: #73d13d;
+}
+
+.submitButton {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  align-self: flex-end;
+}
+
+.submitButton:hover {
+  background-color: #40a9ff;
+}

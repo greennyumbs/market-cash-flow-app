@@ -79,7 +79,7 @@ export default function DailyTransactionForm({ markets }: DailyTransactionFormPr
             type="number"
             value={transaction.rentPrice}
             onChange={(e) => handleRentPriceChange(index, e.target.value)}
-            placeholder="Rent Price"
+            placeholder="ค่าเช่า (บาท)"
             required
             className={styles.input}
           />
@@ -89,27 +89,27 @@ export default function DailyTransactionForm({ markets }: DailyTransactionFormPr
                 type="text"
                 value={expense.name}
                 onChange={(e) => handleExpenseChange(index, expenseIndex, 'name', e.target.value)}
-                placeholder="Expense Name"
+                placeholder="รายจ่าย เช่น ค่าน้ำแข็ง"
                 className={styles.input}
               />
               <input
                 type="number"
                 value={expense.amount}
                 onChange={(e) => handleExpenseChange(index, expenseIndex, 'amount', e.target.value)}
-                placeholder="Amount"
+                placeholder="จำนวนเงิน (บาท)"
                 className={styles.input}
               />
               <button type="button" onClick={() => removeExpense(index, expenseIndex)} className={styles.removeButton}>
-                Remove
+                ลบรายจ่าย
               </button>
             </div>
           ))}
           <button type="button" onClick={() => addExpense(index)} className={styles.addButton}>
-            Add Expense
+            เพิ่มรายจ่าย
           </button>
         </div>
       ))}
-      <button type="submit" className={styles.submitButton}>Submit Daily Transaction</button>
+      <button type="submit" className={styles.submitButton}>ยืนยันรายจ่ายประจำวัน</button>
       {showModal && (
         <ConfirmationModal
           onConfirm={confirmSubmit}

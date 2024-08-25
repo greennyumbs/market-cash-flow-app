@@ -1,4 +1,5 @@
 import { Transaction } from '@/core/entities/Transaction';
+import { CreateDailyTransaction } from '@/core/interface/create-daily-transaction.interface';
 import { TransactionRepository } from '@/core/use-cases/transactionUseCases';
 import { supabase } from '@/infrastructure/database/supabase';
 
@@ -15,10 +16,24 @@ export class SupabaseTransactionRepository implements TransactionRepository {
     return data as Transaction | null;
   }
 
-  async create(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
-    const { data, error } = await supabase.from('Transaction').insert(transaction).single();
-    if (error) throw error;
-    return data as Transaction;
+  async create(req: CreateDailyTransaction): Promise<any> {
+    const { marketId, rentPrice } = req;
+    const transaction = {
+      market_id: marketId,
+      rent_price: rentPrice
+    };
+
+    try {
+      const { data, error } = await supabase.from('Transaction').upsert(transaction).select();
+      if (error) throw error;
+      return {
+        status: 200,
+        transactionData: data
+      };
+    } catch (error) {
+      console.log('error', error);
+      throw new Error('Failed to create transaction.');
+    }
   }
 
   async update(id: number, transaction: Partial<Transaction>): Promise<Transaction> {
