@@ -17,9 +17,10 @@ export class SupabaseTransactionRepository implements TransactionRepository {
   }
 
   async create(req: CreateDailyTransaction): Promise<any> {
-    const { marketId, rentPrice } = req;
+    const { marketId, income, rentPrice } = req;
     const transaction = {
       market_id: marketId,
+      income,
       rent_price: rentPrice
     };
 

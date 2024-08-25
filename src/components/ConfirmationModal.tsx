@@ -9,11 +9,11 @@ export default function ConfirmationModal({ onConfirm, onCancel }: ConfirmationM
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h2>Confirm Submission</h2>
-        <p>Are you sure you want to submit this daily transaction?</p>
+        <h2>ยืนยันรายจ่ายประจำวัน</h2>
+        <p>คุณแน่ใจหรือไม่ว่าต้องการยืนยันรายจ่ายประจำวัน?</p>
         <div className={styles.buttonGroup}>
-          <button onClick={onConfirm} className={styles.confirmButton}>Confirm</button>
-          <button onClick={onCancel} className={styles.cancelButton}>Cancel</button>
+          <button onClick={onConfirm} className={styles.confirmButton}>ยืนยัน</button>
+          <button onClick={onCancel} className={styles.cancelButton}>ยกเลิก</button>
         </div>
       </div>
     </div>

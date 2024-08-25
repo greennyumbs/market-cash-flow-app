@@ -3,6 +3,7 @@ import { Expense } from '../entities/Expense';
 export interface CreateDailyTransaction {
   transactionId: Number;                    // Spare part
   marketId: Number;
+  income: Number;
   rentPrice: Number;
   transactionExpenseMappingId: Number;      // Spare part
   expense: Expense[];

@@ -12,6 +12,7 @@ interface DailyTransactionFormProps {
 
 interface MarketTransaction {
   marketId: number;
+  income: string;
   rentPrice: string;
   expense: { name: string; amount: string }[];
 }
@@ -22,6 +23,7 @@ export default function DailyTransactionForm({
   const [transactions, setTransactions] = useState<MarketTransaction[]>(
     markets.map((market) => ({
       marketId: market.id,
+      income: "",
       rentPrice: "",
       expense: [{ name: "", amount: "" }],
     }))
@@ -34,6 +36,12 @@ export default function DailyTransactionForm({
   const handleRentPriceChange = (index: number, value: string) => {
     const newTransactions = [...transactions];
     newTransactions[index].rentPrice = value;
+    setTransactions(newTransactions);
+  };
+
+  const handleIncomeChange = (index: number, value: string) => {
+    const newTransactions = [...transactions];
+    newTransactions[index].income = value;
     setTransactions(newTransactions);
   };
 
@@ -96,6 +104,7 @@ export default function DailyTransactionForm({
       setTransactions(
         markets.map((market) => ({
           marketId: market.id,
+          income: "",
           rentPrice: "",
           expense: [{ name: "", amount: "" }],
         }))
@@ -129,6 +138,14 @@ export default function DailyTransactionForm({
               &times;
             </button>
             <h3>{markets.find((m) => m.id === transaction.marketId)?.name}</h3>
+            <input
+              type="number"
+              value={transaction.income}
+              onChange={(e) => handleIncomeChange(index, e.target.value)}
+              placeholder="รายรับ (บาท)"
+              required
+              className={styles.input}
+            />
             <input
               type="number"
               value={transaction.rentPrice}
