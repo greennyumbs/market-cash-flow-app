@@ -4,6 +4,7 @@ import { SupabaseTransactionRepository } from '@/data/repositories/TransactionRe
 import { ExpenseUseCases } from '@/core/use-cases/expenseUseCases'
 import { SupabaseExpenseRepository } from '@/data/repositories/ExpenseRepository'
 import styles from './Dashboard.module.css'
+import Image from 'next/image'; // Import the Image component from the appropriate library
 
 const transactionRepository = new SupabaseTransactionRepository()
 const transactionUseCases = new TransactionUseCases(transactionRepository)
@@ -27,10 +28,10 @@ export default async function Dashboard() {
     return acc
   }, {} as Record<string, { income: number, expenses: number }>)
 
-  expenses.forEach(e => {
-    const date = new Date(e.timestamp).toDateString()
-    if (dailySummary[date]) dailySummary[date].expenses += e.amount
-  })
+  // expenses.forEach(e => {
+  //   const date = new Date(e.timestamp).toDateString()
+  //   if (dailySummary[date]) dailySummary[date].expenses += e.amount
+  // })
 
   return (
     <div className={styles.dashboard}>
@@ -44,6 +45,11 @@ export default async function Dashboard() {
             <p>Net: ${(summary.income - summary.expenses).toFixed(2)}</p>
           </div>
         ))}
+      </div>
+      <div className={styles.images}>
+          <Image src="/memee.png" alt="Meme" width={300} height={400} />
+          <Image src="/memee2.png" alt="Meme" width={300} height={400} />
+          <Image src="/memee3.png" alt="Meme" width={300} height={400} />
       </div>
       <h2>รายการทั้งหมด</h2>
       <table className={styles.table}>

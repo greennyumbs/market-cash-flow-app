@@ -30,3 +30,11 @@
   .table th {
     background-color: #f0f0f0;
   }
+
+  .images {
+    flex-direction: row;
+    display: flex;
+    gap: 1rem;
+    justify-content: start;
+    align-items: space-between;
+  }
