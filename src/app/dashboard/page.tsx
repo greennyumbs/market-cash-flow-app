@@ -34,7 +34,7 @@ export default async function Dashboard() {
 
   return (
     <div className={styles.dashboard}>
-      <h1>Dashboard</h1>
+      <h1>รายการล่าสุด</h1>
       <div className={styles.cards}>
         {Object.entries(dailySummary).map(([date, summary]) => (
           <div key={date} className={styles.card}>
@@ -45,20 +45,20 @@ export default async function Dashboard() {
           </div>
         ))}
       </div>
-      <h2>Older Transactions</h2>
+      <h2>รายการทั้งหมด</h2>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Market</th>
-            <th>Income</th>
+            <th>วันที่</th>
+            <th>รายรับ</th>
+            <th>รายจ่าย</th>
           </tr>
         </thead>
         <tbody>
           {olderTransactions.map(t => (
             <tr key={t.id}>
               <td>{new Date(t.timestamp).toLocaleDateString()}</td>
-              <td>{t.market_id}</td>
+              <td>${t.rent_price.toFixed(2)}</td>
               <td>${t.rent_price.toFixed(2)}</td>
             </tr>
           ))}

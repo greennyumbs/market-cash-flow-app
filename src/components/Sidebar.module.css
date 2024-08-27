@@ -1,25 +1,39 @@
 .sidebar {
-    width: 200px;
-    height: 100vh;
-    background-color: #f0f0f0;
-    padding: 1rem;
-  }
-  
-  .nav {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .nav li {
-    margin-bottom: 1rem;
-  }
-  
-  .nav a {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .nav a:hover {
-    color: #0070f3;
-  }
-  
+  width: 220px;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  min-height: 100vh; /* Ensures the sidebar is at least 100vh if the content is shorter */
+  max-height: 100%;  /* Allows the height to grow with the content if it's taller */
+  overflow-y: auto;  /* Adds scroll if the content overflows the viewport height */
+}
+
+.nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 2rem;
+}
+
+.nav li {
+  margin-bottom: 1.2rem;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1rem;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav a:hover {
+  color: #ffffff;
+  background-color: #0070f3;
+  box-shadow: 0 2px 8px rgba(0, 112, 243, 0.3);
+  transform: translateY(-2px);
+}

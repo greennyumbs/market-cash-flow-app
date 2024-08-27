@@ -6,7 +6,8 @@ import DailyTransactionForm from '@/components/DailyTransactionForm';
 import styles from './DailyTransaction.module.css';
 
 async function fetchMarkets(): Promise<Market[]> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/market`, { cache: 'no-store' });
+  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/market`, { cache: 'no-store' });
+  const response = await fetch(`/api/market`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Failed to fetch markets');
   }
