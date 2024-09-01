@@ -6,7 +6,6 @@ import DailyTransactionForm from '@/components/DailyTransactionForm';
 import styles from './DailyTransaction.module.css';
 
 async function fetchMarkets(): Promise<Market[]> {
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/market`, { cache: 'no-store' });
   const response = await fetch(`/api/market`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Failed to fetch markets');
@@ -34,11 +33,10 @@ export default function DailyTransaction() {
     
     loadMarkets();
 
-    // Get the current date and convert to B.E.
     const date = new Date();
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const year = String(date.getFullYear() + 543); // Convert to B.E. by adding 543
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear() + 543);
 
     setCurrentDate(`${day}/${month}/${year}`);
   }, []);
@@ -57,7 +55,7 @@ export default function DailyTransaction() {
   }
 
   return (
-    <div>
+    <div className={styles.dailyTransaction}>
       <h1>บันทึกรายจ่ายวันนี้ ({currentDate})</h1>
       {markets && <DailyTransactionForm markets={markets} />}
     </div>

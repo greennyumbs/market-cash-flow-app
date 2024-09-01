@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap');
+
+.dailyTransaction {
+  font-family: 'Sarabun', sans-serif;
+}
+
 .loadingScreen {
     display: flex;
     flex-direction: column;

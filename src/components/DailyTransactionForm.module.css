@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap');
+
+.formContainer {
+  font-family: 'Sarabun', sans-serif;
+}
+
 .form {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
@@ -39,6 +45,7 @@
   margin-bottom: 0.5rem;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
+  font-family: 'Sarabun', sans-serif;
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -61,6 +68,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
+  font-family: 'Sarabun', sans-serif;
   transition: background-color 0.3s ease;
 }
 

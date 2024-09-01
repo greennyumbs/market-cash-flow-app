@@ -1,11 +1,13 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
 import { SummaryTransaction } from '@/core/interface';
 
 export default function Dashboard() {
   const [summaryTransactions, setSummaryTransactions] = useState<SummaryTransaction[]>([]);
+  const [activeExpenses, setActiveExpenses] = useState<{ id: number; name: string; amount: number }[] | null>(null);
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     async function fetchSummaryTransactions() {
@@ -28,6 +30,16 @@ export default function Dashboard() {
   const latestTransactions = sortedTransactions.slice(0, 3);
   const olderTransactions = sortedTransactions.slice(3);
 
+  const handleSeeMore = (expenses: { id: number; name: string; amount: number }[], event: React.MouseEvent) => {
+    setActiveExpenses(expenses);
+    const rect = event.currentTarget.getBoundingClientRect();
+    setModalPosition({ top: rect.bottom + window.scrollY, left: rect.left });
+  };
+
+  const handleMouseLeave = () => {
+    setActiveExpenses(null);
+  };
+
   return (
     <div className={styles.dashboard}>
       <h1>รายการล่าสุด</h1>
@@ -40,6 +52,13 @@ export default function Dashboard() {
             <p>ค่าเช่าที่: ฿{transaction.rentPrice.toFixed(2)}</p>
             <p>รายจ่ายทั้งหมด: ฿{transaction.totalExpense.toFixed(2)}</p>
             <p>ยอดรวมสุทธิ: ฿{(transaction.income - transaction.totalExpense).toFixed(2)}</p>
+            <button 
+              className={styles.seeMoreBtn}
+              onMouseEnter={(e) => handleSeeMore(transaction.expense, e)}
+              onMouseLeave={handleMouseLeave}
+            >
+              ดูเพิ่มเติม
+            </button>
           </div>
         ))}
       </div>
@@ -53,6 +72,7 @@ export default function Dashboard() {
             <th>ค่าเช่าที่</th>
             <th>รายจ่ายทั้งหมด</th>
             <th>ยอดรวมสุทธิ</th>
+            <th>รายละเอียด</th>
           </tr>
         </thead>
         <tbody>
@@ -64,10 +84,34 @@ export default function Dashboard() {
               <td>฿{transaction.rentPrice.toFixed(2)}</td>
               <td>฿{transaction.totalExpense.toFixed(2)}</td>
               <td>฿{(transaction.income - transaction.totalExpense).toFixed(2)}</td>
+              <td>
+                <button 
+                  className={styles.seeMoreBtn}
+                  onMouseEnter={(e) => handleSeeMore(transaction.expense, e)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  ดูเพิ่มเติม
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {activeExpenses && (
+        <div 
+          className={styles.modal} 
+          style={{ top: `${modalPosition.top}px`, left: `${modalPosition.left}px` }}
+          onMouseEnter={() => setActiveExpenses(activeExpenses)}
+          onMouseLeave={handleMouseLeave}
+        >
+          <h3>รายละเอียดค่าใช้จ่าย</h3>
+          <ul>
+            {activeExpenses.map(expense => (
+              <li key={expense.id}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
