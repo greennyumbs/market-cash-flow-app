@@ -1,40 +1,101 @@
+/* src/app/dashboard/Dashboard.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap');
+
 .dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
+  font-family: 'Sarabun', sans-serif;
+  max-width: 1200px;
+  margin-left: 4rem;
+  color: #333;
+}
+
+.dashboard h1, .dashboard h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.table th {
+  background-color: #3498db;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.table td {
+  color: #34495e;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #ecf0f1;
+}
+
+@media (max-width: 768px) {
   .cards {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .card {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 1rem;
-    flex: 1;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th, .table td {
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    text-align: left;
-  }
-  
-  .table th {
-    background-color: #f0f0f0;
+    grid-template-columns: 1fr;
   }
 
-  .images {
-    flex-direction: row;
-    display: flex;
-    gap: 1rem;
-    justify-content: start;
-    align-items: space-between;
+  .table {
+    font-size: 0.9rem;
   }
+
+  .table th, .table td {
+    padding: 0.75rem;
+  }
+}

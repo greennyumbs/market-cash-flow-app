@@ -2,7 +2,6 @@ import { CreateDailyTransaction, TransactionExpenseMapping } from '../interface/
 import { SupabaseExpenseRepository } from '../../data/repositories/ExpenseRepository';
 import { SupabaseTransactionRepository } from '../../data/repositories/TransactionRepository';
 import { Expense, Transaction } from '../entities';
-import { TransactionRepository } from './transactionUseCases';
 
 export interface DailyTransactionRepository {
   create(transactionExpenseMapping: TransactionExpenseMapping[]): Promise<null>;
