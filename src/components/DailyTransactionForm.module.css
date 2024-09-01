@@ -6,10 +6,9 @@
 
 .form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
-  gap: 2rem; /* Space between the forms */
-  max-width: 1600px;
-  margin: 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1300px;
   padding: 2rem;
   background-color: #f0f2f5;
   border-radius: 8px;

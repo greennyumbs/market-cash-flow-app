@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
 import { SummaryTransaction } from '@/core/interface';
+import Image from 'next/image';
 
 export default function Dashboard() {
   const [summaryTransactions, setSummaryTransactions] = useState<SummaryTransaction[]>([]);
@@ -112,6 +113,11 @@ export default function Dashboard() {
           </ul>
         </div>
       )}
+      <div className={styles.images}>
+        <Image src="/memee.png" alt="meme" width={300} height={400} />
+        <Image src="/memee2.png" alt="meme" width={300} height={400} />
+        <Image src="/memee3.png" alt="meme" width={300} height={400} />
+      </div>
     </div>
   );
 }

@@ -150,3 +150,12 @@
     padding: 0.75rem;
   }
 }
+
+.images {
+  flex-direction: row;
+  display: flex;
+  gap: 2rem;
+  justify-content: start;
+  margin-top: 2rem;
+  align-items: space-between;
+}
