@@ -9,11 +9,6 @@ const expenseRepository = new SupabaseExpenseRepository()
 const transactionRepository = new SupabaseTransactionRepository()
 const dailyTransactionUseCases = new DailyTransactionUseCases(dailyTransactionRepository, expenseRepository, transactionRepository)
 
-// export async function GET() {
-//   const dailyTransactions = await dailyTransactionUseCases.getAllTransactions()
-//   return NextResponse.json(dailyTransactions)
-// }
-
 export async function POST(request: Request) {
   const body = await request.json()
   try {
