@@ -20,3 +20,16 @@ export interface RawSummaryTransaction {
     transactionExpenseMapping: Expense[];
     marketName: String;
 }
+
+export interface Summary {
+  date: string;
+  data: TransactionSummary;
+}
+
+interface TransactionSummary {
+  transactionId: number;
+  marketName: string;
+  income: number;
+  rentPrice: number;
+  expense: Expense[];
+}

@@ -1,5 +1,5 @@
-import { Expense } from '@/core/entities/Expense';
-import { CreateDailyTransaction } from '@/core/interface/create-daily-transaction.interface';
+import { Expense } from '../../core/entities';
+import { CreateDailyTransaction, TransactionExpenseMapping } from '@/core/interface';
 import { ExpenseRepository } from '@/core/use-cases/expenseUseCases';
 import { supabase } from '@/infrastructure/database/supabase';
 
@@ -16,10 +16,16 @@ export class SupabaseExpenseRepository implements ExpenseRepository {
     return data as Expense | null;
   }
 
-  async create(req: CreateDailyTransaction): Promise<any> {
-    const { expense } = req;
+  async create(req: TransactionExpenseMapping[]): Promise<any> {
+    const formattedExpense = req.map((expense: TransactionExpenseMapping) => {
+      return {
+        transaction_id: expense.transactionId,
+        expense_name: expense.expenseName,
+        amount: expense.amount
+      }
+    })
     try {
-      const { data, error } = await supabase.from('Expense').upsert(expense).select();
+      const { data, error } = await supabase.from('TransactionExpenseMapping').upsert(formattedExpense).select('*');
       if (error) throw error;
       return {
         status: 200,

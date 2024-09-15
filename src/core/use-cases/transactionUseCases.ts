@@ -20,7 +20,7 @@ export class TransactionUseCases {
     return this.repository.getById(id);
   }
 
-  async createTransaction(req: CreateDailyTransaction): Promise<Transaction> {
+  async createTransaction(req: CreateDailyTransaction): Promise<any> {
     return this.repository.create(req);
   }
 

@@ -12,11 +12,11 @@ const dailyTransactionUseCases = new DailyTransactionUseCases(dailyTransactionRe
 export async function POST(request: Request) {
   const body = await request.json()
   try {
-    const data = await dailyTransactionUseCases.createDailyTransaction(body)
+    const results = await dailyTransactionUseCases.createDailyTransaction(body)
     return NextResponse.json({
       status: 200,
       message: 'Daily transaction created successfully',
-      data: data
+      data: results
     })
   } catch (error) {
     return NextResponse.json({

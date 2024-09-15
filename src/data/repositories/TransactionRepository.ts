@@ -16,16 +16,15 @@ export class SupabaseTransactionRepository implements TransactionRepository {
     return data as Transaction | null;
   }
 
-  async create(req: CreateDailyTransaction): Promise<any> {
-    const { marketId, income, rentPrice } = req;
+  async create(req: Transaction): Promise<any> {
+    const { income, rentPrice } = req;
     const transaction = {
-      market_id: marketId,
       income,
       rent_price: rentPrice
     };
 
     try {
-      const { data, error } = await supabase.from('Transaction').upsert(transaction).select();
+      const { data, error } = await supabase.from('Transaction').upsert(transaction).select('id');
       if (error) throw error;
       return {
         status: 200,

@@ -1,36 +1,47 @@
-import { RawSummaryTransaction, SummaryTransaction } from "../interface";
+import {
+  RawSummaryTransaction,
+  SummaryTransaction,
+  Summary,
+} from "../interface";
 
 export interface SummaryTransactionRepository {
-    getSummaryTransaction(): Promise<RawSummaryTransaction[]>;
+  getSummaryTransaction(): Promise<any>;
 }
 
 export class SummaryTransactionUseCases {
-    constructor(private repository: SummaryTransactionRepository) {}
+  constructor(private repository: SummaryTransactionRepository) {}
 
-    async getSummaryTransaction(): Promise<SummaryTransaction[]> {
-        const rawData = await this.repository.getSummaryTransaction();
+  async getSummaryTransaction(): Promise<any> {
+    const { data } = await this.repository.getSummaryTransaction();
 
-        const formattedData = rawData.map((transaction: RawSummaryTransaction) => {
-            let totalExpense = transaction.rentPrice as number;
-            for (const expense of transaction.transactionExpenseMapping) {
-                totalExpense += expense.amount as number;
-            }
+    const groupbyDate = data.reduce((acc: any, curr: any) => {
+      const date = new Date(curr.created_at).toLocaleDateString();
+      if (!acc[date]) {
+        acc[date] = [];
+      }
 
-            return {
-                transactionId: transaction.transactionId as number,
-                marketId: transaction.marketId as number,
-                marketName: transaction.marketName as string,
-                income: transaction.income as number,
-                rentPrice: transaction.rentPrice as number,
-                expense: transaction.transactionExpenseMapping,
-                totalExpense: totalExpense,
-                createdAt: transaction.createdAt,
-            } as SummaryTransaction;
-        });
+      const { Market: market, Transaction: transaction } = curr;
 
-        console.log('comeback to usecase');
-        console.log(formattedData);
+      // Mapping expenses to desired structure
+      const formattedExpenses = transaction.TransactionExpenseMapping.map(
+        (expense: any) => ({
+          amount: expense.amount,
+          name: expense.expense_name,
+        })
+      );
 
-        return formattedData;
-    }
+      // Adding formatted market and transaction details
+      acc[date].push({
+        market_name: market.name,
+        transaction: {
+          income: transaction.income,
+          rent_price: transaction.rent_price,
+          Expense: formattedExpenses,
+        },
+      });
+
+      return acc;
+    }, {});
+    return groupbyDate;
+  }
 }

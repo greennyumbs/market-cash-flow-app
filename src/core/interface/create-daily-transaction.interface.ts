@@ -1,15 +1,20 @@
 import { Expense } from '../entities/Expense';
 
 export interface CreateDailyTransaction {
-  transactionId: Number;                    // Spare part
-  marketId: Number;
-  income: Number;
-  rentPrice: Number;
-  transactionExpenseMappingId: Number;      // Spare part
+  marketId: number;
+  income: number;
+  rentPrice: number;
   expense: Expense[];
 }
 
 export interface TransactionExpenseMapping {
-  transactionId: Number;
-  expenseId: Number;
+  transactionId: number;
+  expenseName: string;
+  amount: number;
+}
+
+export interface DailyTransactionMarket {
+  transactionId: number;
+  marketId: number;
+  createdAt: string;
 }
