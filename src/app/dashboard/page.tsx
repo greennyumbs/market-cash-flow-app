@@ -39,9 +39,17 @@ export default function Dashboard() {
     fetchSummaryData();
   }, []);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, format: 'display' | 'log' = 'display') => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB'); // 'en-GB' formats the date as dd/mm/yy
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    
+    if (format === 'log') {
+      return `${yyyy}-${mm}-${dd}`;
+    } else {
+      return `${dd}/${mm}/${yyyy.toString().slice(-2)}`;
+    }
   };
 
   const dates = Object.keys(summaryData).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
@@ -60,6 +68,12 @@ export default function Dashboard() {
     setExpandedRow(expandedRow === date ? null : date);
   };
 
+  const handleDelete = (date: string) => {
+    const formattedDate = formatDate(date, 'log');
+    // Handle delete logic here
+    console.log(`Delete for date: ${formattedDate}`);
+  };
+
   return (
     <div className={styles.dashboard}>
       <h1>ข้อมูลสรุป</h1>
@@ -75,6 +89,13 @@ export default function Dashboard() {
           {latestDate && (
             <div className={styles.summaryCard}>
               <h2>สรุปรายการล่าสุด - {formatDate(latestDate)}</h2>
+              <button
+                className={styles.deleteBtn}
+                onClick={() => handleDelete(latestDate)}
+                aria-label="Delete summary"
+              >
+                <img src="/bin.png" alt="Delete" />
+              </button>
               <div className={styles.dailyTotals}>
                 {(() => {
                   const { income, expense, rentPrice } = calculateDailyTotals(summaryData[latestDate]);
@@ -153,6 +174,7 @@ export default function Dashboard() {
                 <th>รายจ่ายรวม</th>
                 <th>กำไรสุทธิ</th>
                 <th>รายละเอียด</th>
+                <th></th> {/* New column for delete button */}
               </tr>
             </thead>
             <tbody>
@@ -172,10 +194,19 @@ export default function Dashboard() {
                           {expandedRow === date ? 'ซ่อน' : 'แสดง'}
                         </button>
                       </td>
+                      <td>
+                        <div
+                          className={styles.deleteBtn}
+                          onClick={() => handleDelete(date)}
+                          aria-label="Delete entry"
+                        >
+                          <img src="/bin.png" alt="Delete" />
+                        </div>
+                      </td>
                     </tr>
                     {expandedRow === date && (
                       <tr>
-                        <td colSpan={6} className={styles.expandedCell}>
+                        <td colSpan={7} className={styles.expandedCell}>
                           <div className={styles.expandedContent}>
                             {summaryData[date].map((transaction, index) => (
                               <div key={index} className={styles.expandedMarket}>
@@ -183,7 +214,7 @@ export default function Dashboard() {
                                 <div className={styles.marketInfo}>
                                   <p>รายได้: ฿{transaction.transaction.income.toFixed(2)}</p>
                                   <p>ค่าเช่าที่: ฿{transaction.transaction.rent_price.toFixed(2)}</p>
-                                  <p>รายจ่าย: ฿{transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0).toFixed(2)}</p>
+                                  <p>รายจ่าย: ฿{(transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
                                   <p>กำไรสุทธิ: ฿{(transaction.transaction.income - transaction.transaction.rent_price - transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
                                 </div>
                                 {transaction.transaction.Expense.length > 0 && (

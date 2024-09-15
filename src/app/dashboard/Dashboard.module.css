@@ -18,12 +18,28 @@
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .summaryCard h2 {
   font-size: 1.4rem;
   margin-bottom: 1rem;
   margin-top: 0;
+}
+
+.summaryCard .deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0;
+}
+
+.summaryCard .deleteBtn img {
+  width: 16px;
+  height: 16px;
 }
 
 .dailyTotals {
@@ -34,7 +50,6 @@
 }
 
 .dailyTotals > div {
-  /* background-color: #fff; */
   background-color: #45a8eb;
   padding: 1rem;
   border-radius: 8px;
@@ -44,7 +59,6 @@
 .dailyTotals span {
   display: block;
   font-size: 0.9rem;
-  /* color: #7f8c8d; */
   color: white;
   margin-bottom: 0.5rem;
 }
@@ -52,7 +66,6 @@
 .dailyTotals strong {
   display: block;
   font-size: 1.2rem;
-  /* color: #2c3e50; */
   color: rgb(255, 255, 255);
 }
 
@@ -126,6 +139,26 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table .deleteBtn img {
+  width: 16px; /* Adjust the size as needed */
+  height: 16px; /* Adjust the size as needed */
+  object-fit: contain; /* Ensures the image maintains its aspect ratio */
+}
+
+.table .deleteBtn img:hover {
+  transform: scale(1.1);
+  transition-duration: 100ms;
+  cursor: pointer;
+}
+
+.table th:last-child,
+.table td:last-child {
+  width: 10px;
+  padding: 0.5rem;
+  padding-right: 1.5rem;
+  text-align: center;
 }
 
 .table th, .table td {
