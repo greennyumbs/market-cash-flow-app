@@ -57,13 +57,13 @@ export default function Dashboard() {
       
       {latestDate && (
         <div className={styles.summaryCard}>
-          <div className={styles.summaryHeader}>
-            <h2>สรุปรายการล่าสุด - {latestDate}</h2>
+          <h2>สรุปรายการล่าสุด - {latestDate}</h2>
+          <div className={styles.dailyTotals}>
             {(() => {
               const { income, expense, rentPrice } = calculateDailyTotals(summaryData[latestDate]);
               const netProfit = income - expense - rentPrice;
               return (
-                <div className={styles.dailyTotals}>
+                <>
                   <div>
                     <span>รายได้รวม</span>
                     <strong>฿{income.toFixed(2)}</strong>
@@ -80,11 +80,11 @@ export default function Dashboard() {
                     <span>กำไรสุทธิ</span>
                     <strong>฿{netProfit.toFixed(2)}</strong>
                   </div>
-                </div>
+                </>
               );
             })()}
           </div>
-          <div className={styles.marketDetailsGrid}>
+          <div className={styles.marketDetails}>
             {summaryData[latestDate].map((transaction, index) => {
               const totalExpense = transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0);
               const netProfit = transaction.transaction.income - transaction.transaction.rent_price - totalExpense;
@@ -93,22 +93,32 @@ export default function Dashboard() {
                   <h3>{transaction.market_name}</h3>
                   <div className={styles.marketInfo}>
                     <div>
-                      <span>รายได้</span>
+                      <span>รายได้:</span>
                       <strong>฿{transaction.transaction.income.toFixed(2)}</strong>
                     </div>
                     <div>
-                      <span>ค่าเช่าที่</span>
+                      <span>ค่าเช่าที่:</span>
                       <strong>฿{transaction.transaction.rent_price.toFixed(2)}</strong>
                     </div>
                     <div>
-                      <span>รายจ่าย</span>
+                      <span>รายจ่าย:</span>
                       <strong>฿{totalExpense.toFixed(2)}</strong>
                     </div>
                     <div>
-                      <span>กำไรสุทธิ</span>
+                      <span>กำไรสุทธิ:</span>
                       <strong>฿{netProfit.toFixed(2)}</strong>
                     </div>
                   </div>
+                  {transaction.transaction.Expense.length > 0 && (
+                    <details className={styles.expenseDetails}>
+                      <summary>รายละเอียดค่าใช้จ่าย</summary>
+                      <ul>
+                        {transaction.transaction.Expense.map((expense, i) => (
+                          <li key={i}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
                 </div>
               );
             })}
@@ -116,7 +126,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <h2>รายการทั้งหมด</h2>
+<h2>รายการทั้งหมด</h2>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -148,7 +158,7 @@ export default function Dashboard() {
                 </tr>
                 {expandedRow === date && (
                   <tr>
-                    <td colSpan={6}>
+                    <td colSpan={6} className={styles.expandedCell}>
                       <div className={styles.expandedContent}>
                         {summaryData[date].map((transaction, index) => (
                           <div key={index} className={styles.expandedMarket}>
@@ -159,14 +169,16 @@ export default function Dashboard() {
                               <p>รายจ่าย: ฿{transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0).toFixed(2)}</p>
                               <p>กำไรสุทธิ: ฿{(transaction.transaction.income - transaction.transaction.rent_price - transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
                             </div>
-                            <details>
-                              <summary>รายละเอียดค่าใช้จ่าย</summary>
-                              <ul>
-                                {transaction.transaction.Expense.map((expense, i) => (
-                                  <li key={i}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
-                                ))}
-                              </ul>
-                            </details>
+                            {transaction.transaction.Expense.length > 0 && (
+                              <details className={styles.expenseDetails}>
+                                <summary>รายละเอียดค่าใช้จ่าย</summary>
+                                <ul>
+                                  {transaction.transaction.Expense.map((expense, i) => (
+                                    <li key={i}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
+                                  ))}
+                                </ul>
+                              </details>
+                            )}
                           </div>
                         ))}
                       </div>
