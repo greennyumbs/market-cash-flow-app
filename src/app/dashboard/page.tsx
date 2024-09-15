@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
@@ -35,6 +35,11 @@ export default function Dashboard() {
     fetchSummaryData();
   }, []);
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB'); // 'en-GB' formats the date as dd/mm/yy
+  };
+
   const dates = Object.keys(summaryData).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
   const latestDate = dates[0];
 
@@ -57,7 +62,7 @@ export default function Dashboard() {
       
       {latestDate && (
         <div className={styles.summaryCard}>
-          <h2>สรุปรายการล่าสุด - {latestDate}</h2>
+          <h2>สรุปรายการล่าสุด - {formatDate(latestDate)}</h2>
           <div className={styles.dailyTotals}>
             {(() => {
               const { income, expense, rentPrice } = calculateDailyTotals(summaryData[latestDate]);
@@ -126,7 +131,7 @@ export default function Dashboard() {
         </div>
       )}
 
-<h2>รายการทั้งหมด</h2>
+      <h2>รายการทั้งหมด</h2>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -145,7 +150,7 @@ export default function Dashboard() {
             return (
               <React.Fragment key={date}>
                 <tr>
-                  <td>{date}</td>
+                  <td>{formatDate(date)}</td>
                   <td>฿{income.toFixed(2)}</td>
                   <td>฿{rentPrice.toFixed(2)}</td>
                   <td>฿{expense.toFixed(2)}</td>
