@@ -13,6 +13,8 @@ async function fetchMarkets(): Promise<Market[]> {
   return response.json();
 }
 
+export const fetchCache = 'force-no-store';
+
 export default function DailyTransaction() {
   const [markets, setMarkets] = useState<Market[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

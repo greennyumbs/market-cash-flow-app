@@ -17,6 +17,9 @@ interface DailySummary {
   [date: string]: Transaction[];
 }
 
+export const fetchCache = 'force-no-store';
+export const dynamic = 'force-dynamic';
+
 export default function Dashboard() {
   const [summaryData, setSummaryData] = useState<DailySummary>({});
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
@@ -26,7 +29,9 @@ export default function Dashboard() {
     async function fetchSummaryData() {
       setLoading(true); // Start loading
       try {
-        const response = await fetch('/api/summary');
+        const response = await fetch('/api/summary', {
+          cache:"no-cache"
+        });
         const data = await response.json();
         setSummaryData(data);
       } catch (error) {

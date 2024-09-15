@@ -5,6 +5,8 @@ import { SupabaseSummaryTransactionRepository } from '@/data/repositories/Summar
 const summaryTransactionRepository = new SupabaseSummaryTransactionRepository()
 const summaryTransactionUseCases = new SummaryTransactionUseCases(summaryTransactionRepository)
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
     const summaryTransactions = await summaryTransactionUseCases.getSummaryTransaction()
     return NextResponse.json(summaryTransactions)

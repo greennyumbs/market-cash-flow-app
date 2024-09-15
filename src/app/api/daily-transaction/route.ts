@@ -9,6 +9,8 @@ const expenseRepository = new SupabaseExpenseRepository()
 const transactionRepository = new SupabaseTransactionRepository()
 const dailyTransactionUseCases = new DailyTransactionUseCases(dailyTransactionRepository, expenseRepository, transactionRepository)
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   const body = await request.json()
   try {
