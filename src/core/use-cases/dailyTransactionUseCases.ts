@@ -54,7 +54,7 @@ export class DailyTransactionUseCases {
           marketId,
           createdAt: this.getCurrentDateWithoutTime(),
         };
-
+        
         const { dailyTransactionData } = await this.insertDailyTransactionMarket(dailyTransactionMarket);
 
         results.transactionAdded.push(dailyTransactionData);
@@ -90,6 +90,13 @@ export class DailyTransactionUseCases {
 
   // Utility function to get date without time
   private getCurrentDateWithoutTime(): string {
-    return new Date().toISOString().split('T')[0];
+    const offset = 7 * 60; // UTC+7 in minutes
+    const now = new Date();
+    
+    // Get the current time in milliseconds and adjust for the offset
+    const localDate = new Date(now.getTime() + offset * 60 * 1000);
+    
+    // Format the date to yyyy-mm-dd
+    return localDate.toISOString().split('T')[0];
   }
 }
