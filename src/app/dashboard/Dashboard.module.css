@@ -33,7 +33,8 @@
 }
 
 .dailyTotals > div {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #45a8eb;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -42,14 +43,16 @@
 .dailyTotals span {
   display: block;
   font-size: 0.9rem;
-  color: #7f8c8d;
+  /* color: #7f8c8d; */
+  color: white;
   margin-bottom: 0.5rem;
 }
 
 .dailyTotals strong {
   display: block;
   font-size: 1.2rem;
-  color: #2c3e50;
+  /* color: #2c3e50; */
+  color: rgb(241, 241, 241);
 }
 
 .marketDetails {
@@ -262,4 +265,36 @@
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
   }
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full height */
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #555;
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import { Market } from '@/core/entities/Market';
@@ -43,9 +43,9 @@ export default function DailyTransaction() {
 
   if (loading) {
     return (
-      <div className={styles.loadingScreen}>
+      <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p>Loading...</p>
+        <p className={styles.loadingText}>กำลังโหลด...</p>
       </div>
     );
   }
