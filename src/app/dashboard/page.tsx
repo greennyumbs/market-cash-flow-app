@@ -23,24 +23,25 @@ export const dynamic = 'force-dynamic';
 export default function Dashboard() {
   const [summaryData, setSummaryData] = useState<DailySummary>({});
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // New state for loading
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Moved fetchSummaryData outside useEffect for reuse
+  const fetchSummaryData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/summary', {
+        cache: "no-cache"
+      });
+      const data = await response.json();
+      setSummaryData(data);
+    } catch (error) {
+      console.error('Error fetching summary data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchSummaryData() {
-      setLoading(true); // Start loading
-      try {
-        const response = await fetch('/api/summary', {
-          cache:"no-cache"
-        });
-        const data = await response.json();
-        setSummaryData(data);
-      } catch (error) {
-        console.error('Error fetching summary data:', error);
-      } finally {
-        setLoading(false); // End loading
-      }
-    }
-
     fetchSummaryData();
   }, []);
 
@@ -73,11 +74,31 @@ export default function Dashboard() {
     setExpandedRow(expandedRow === date ? null : date);
   };
 
-  const handleDelete = (date: string) => {
+  const handleDelete = async (date: string) => {
     const formattedDate = formatDate(date, 'log');
-    // Handle delete logic here
-    console.log(`Delete for date: ${formattedDate}`);
+
+    console.log('formattedDate', formattedDate);
+
+    try {
+      const response = await fetch('/api/daily-transaction', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ created_at: formattedDate }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error deleting daily transaction');
+      }
+
+      // Refetch the summary data after the successful deletion
+      await fetchSummaryData();
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+    }
   };
+
 
   return (
     <div className={styles.dashboard}>
