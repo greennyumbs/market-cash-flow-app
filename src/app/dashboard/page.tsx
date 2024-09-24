@@ -99,7 +99,6 @@ export default function Dashboard() {
     }
   };
 
-
   return (
     <div className={styles.dashboard}>
       <h1>ข้อมูลสรุป</h1>
@@ -190,80 +189,75 @@ export default function Dashboard() {
             </div>
           )}
 
-          <h2>รายการทั้งหมด</h2>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>วันที่</th>
-                <th>รายได้รวม</th>
-                <th>ค่าเช่ารวม</th>
-                <th>รายจ่ายรวม</th>
-                <th>กำไรสุทธิ</th>
-                <th>รายละเอียด</th>
-                <th></th> {/* New column for delete button */}
-              </tr>
-            </thead>
-            <tbody>
-              {dates.slice(1).map(date => {
-                const { income, expense, rentPrice } = calculateDailyTotals(summaryData[date]);
-                const netProfit = income - expense - rentPrice;
-                return (
-                  <React.Fragment key={date}>
-                    <tr>
-                      <td>{formatDate(date)}</td>
-                      <td>฿{income.toFixed(2)}</td>
-                      <td>฿{rentPrice.toFixed(2)}</td>
-                      <td>฿{expense.toFixed(2)}</td>
-                      <td>฿{netProfit.toFixed(2)}</td>
-                      <td>
-                        <button className={styles.toggleBtn} onClick={() => toggleRow(date)}>
-                          {expandedRow === date ? 'ซ่อน' : 'แสดง'}
-                        </button>
-                      </td>
-                      <td>
-                        <div
-                          className={styles.deleteBtn}
-                          onClick={() => handleDelete(date)}
-                          aria-label="Delete entry"
-                        >
-                          <img src="/bin.png" alt="Delete" />
-                        </div>
-                      </td>
-                    </tr>
-                    {expandedRow === date && (
-                      <tr>
-                        <td colSpan={7} className={styles.expandedCell}>
-                          <div className={styles.expandedContent}>
-                            {summaryData[date].map((transaction, index) => (
-                              <div key={index} className={styles.expandedMarket}>
-                                <h4>{transaction.market_name}</h4>
-                                <div className={styles.marketInfo}>
-                                  <p>รายได้: ฿{transaction.transaction.income.toFixed(2)}</p>
-                                  <p>ค่าเช่าที่: ฿{transaction.transaction.rent_price.toFixed(2)}</p>
-                                  <p>รายจ่าย: ฿{(transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
-                                  <p>กำไรสุทธิ: ฿{(transaction.transaction.income - transaction.transaction.rent_price - transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
-                                </div>
-                                {transaction.transaction.Expense.length > 0 && (
-                                  <details className={styles.expenseDetails}>
-                                    <summary>รายละเอียดค่าใช้จ่าย</summary>
-                                    <ul>
-                                      {transaction.transaction.Expense.map((expense, i) => (
-                                        <li key={i}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
-                                      ))}
-                                    </ul>
-                                  </details>
-                                )}
+          {/* Conditionally render table section only if there are more than one date */}
+          {dates.length > 1 && (
+            <>
+              <h2>รายการทั้งหมด</h2>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>วันที่</th>
+                    <th>รายได้รวม</th>
+                    <th>ค่าเช่ารวม</th>
+                    <th>รายจ่ายรวม</th>
+                    <th>กำไรสุทธิ</th>
+                    <th>รายละเอียด</th>
+                    <th></th> {/* New column for delete button */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {dates.slice(1).map(date => {
+                    const { income, expense, rentPrice } = calculateDailyTotals(summaryData[date]);
+                    const netProfit = income - expense - rentPrice;
+                    return (
+                      <React.Fragment key={date}>
+                        <tr>
+                          <td>{formatDate(date)}</td>
+                          <td>฿{income.toFixed(2)}</td>
+                          <td>฿{rentPrice.toFixed(2)}</td>
+                          <td>฿{expense.toFixed(2)}</td>
+                          <td>฿{netProfit.toFixed(2)}</td>
+                          <td>
+                            <button className={styles.toggleBtn} onClick={() => toggleRow(date)}>
+                              {expandedRow === date ? 'ซ่อน' : 'แสดง'}
+                            </button>
+                          </td>
+                          <td>
+                            <div
+                              className={styles.deleteBtn}
+                              onClick={() => handleDelete(date)}
+                              aria-label="Delete entry"
+                            >
+                              <img src="/bin.png" alt="Delete" />
+                            </div>
+                          </td>
+                        </tr>
+                        {expandedRow === date && (
+                          <tr>
+                            <td colSpan={7} className={styles.expandedCell}>
+                              <div className={styles.expandedContent}>
+                                {summaryData[date].map((transaction, index) => (
+                                  <div key={index} className={styles.expandedMarket}>
+                                    <h4>{transaction.market_name}</h4>
+                                    <div className={styles.marketInfo}>
+                                      <p>รายได้: ฿{transaction.transaction.income.toFixed(2)}</p>
+                                      <p>ค่าเช่าที่: ฿{transaction.transaction.rent_price.toFixed(2)}</p>
+                                      <p>รายจ่าย: ฿{(transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
+                                      <p>กำไรสุทธิ: ฿{(transaction.transaction.income - transaction.transaction.rent_price - transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </>
+          )}
         </>
       )}
     </div>
