@@ -27,3 +27,20 @@ export async function POST(request: Request) {
     })
   }
 }
+
+export async function DELETE(request: Request) {
+  const body = await request.json()
+  try {
+    const results = await dailyTransactionUseCases.deleteDailyTransaction(body)
+    return NextResponse.json({
+      status: 200,
+      message: 'Daily transaction deleted successfully',
+      data: results
+    })
+  } catch (error) {
+    return NextResponse.json({
+      status: 500,
+      message: 'Failed to delete daily transaction',
+    })
+  }
+}

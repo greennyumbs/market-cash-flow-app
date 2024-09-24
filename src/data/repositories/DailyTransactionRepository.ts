@@ -27,4 +27,21 @@ export class SupabaseDailyTransactionRepository
       throw new Error("Failed to create daily transaction.");
     }
   }
+
+  async delete(req: any): Promise<any> {
+    const { created_at } = req;
+    console.log("created_at", created_at);
+    try {
+      const { data, error } = await supabase
+        .from("DailyTransactionMarket")
+        .delete()
+        .eq("created_at", created_at)
+        .select();
+      if (error) throw error;
+      return { status: "success", data: data };
+    } catch (error) {
+      console.log("error", error);
+      throw new Error("Failed to delete daily transaction.");
+    }
+  }
 }
