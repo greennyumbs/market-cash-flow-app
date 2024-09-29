@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import styles from './Dashboard.module.css';
-import { Expense } from '@/core/entities';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import React, { useEffect, useState } from "react";
+import styles from "./Dashboard.module.css";
+import { Expense } from "@/core/entities";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 interface Transaction {
   market_name: string;
@@ -18,8 +18,8 @@ interface DailySummary {
   [date: string]: Transaction[];
 }
 
-export const fetchCache = 'force-no-store';
-export const dynamic = 'force-dynamic';
+export const fetchCache = "force-no-store";
+export const dynamic = "force-dynamic";
 
 export default function Dashboard() {
   const [summaryData, setSummaryData] = useState<DailySummary>({});
@@ -31,13 +31,13 @@ export default function Dashboard() {
   const fetchSummaryData = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/summary', {
-        cache: "no-cache"
+      const response = await fetch("/api/summary", {
+        cache: "no-cache",
       });
       const data = await response.json();
       setSummaryData(data);
     } catch (error) {
-      console.error('Error fetching summary data:', error);
+      console.error("Error fetching summary data:", error);
     } finally {
       setLoading(false);
     }
@@ -47,29 +47,40 @@ export default function Dashboard() {
     fetchSummaryData();
   }, []);
 
-  const formatDate = (dateString: string, format: 'display' | 'log' = 'display') => {
+  const formatDate = (
+    dateString: string,
+    format: "display" | "log" = "display"
+  ) => {
     const date = new Date(dateString);
     const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    
-    if (format === 'log') {
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+
+    if (format === "log") {
       return `${yyyy}-${mm}-${dd}`;
     } else {
       return `${dd}/${mm}/${yyyy.toString().slice(-2)}`;
     }
   };
 
-  const dates = Object.keys(summaryData).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+  const dates = Object.keys(summaryData).sort(
+    (a, b) => new Date(b).getTime() - new Date(a).getTime()
+  );
   const latestDate = dates[0];
 
   const calculateDailyTotals = (transactions: Transaction[]) => {
-    return transactions.reduce((acc, t) => {
-      acc.income += t.transaction.income;
-      acc.expense += t.transaction.Expense.reduce((sum, e) => sum + e.amount, 0);
-      acc.rentPrice += t.transaction.rent_price;
-      return acc;
-    }, { income: 0, expense: 0, rentPrice: 0 });
+    return transactions.reduce(
+      (acc, t) => {
+        acc.income += t.transaction.income;
+        acc.expense += t.transaction.Expense.reduce(
+          (sum, e) => sum + e.amount,
+          0
+        );
+        acc.rentPrice += t.transaction.rent_price;
+        return acc;
+      },
+      { income: 0, expense: 0, rentPrice: 0 }
+    );
   };
 
   const toggleRow = (date: string) => {
@@ -83,25 +94,25 @@ export default function Dashboard() {
 
   const handleDeleteConfirm = async () => {
     if (dateToDelete) {
-      const formattedDate = formatDate(dateToDelete, 'log');
+      const formattedDate = formatDate(dateToDelete, "log");
 
       try {
-        const response = await fetch('/api/daily-transaction', {
-          method: 'DELETE',
+        const response = await fetch("/api/daily-transaction", {
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ created_at: formattedDate }),
         });
 
         if (!response.ok) {
-          throw new Error('Error deleting daily transaction');
+          throw new Error("Error deleting daily transaction");
         }
 
         // Refetch the summary data after the successful deletion
         await fetchSummaryData();
       } catch (error) {
-        console.error('Error deleting transaction:', error);
+        console.error("Error deleting transaction:", error);
       } finally {
         setShowDeleteModal(false);
         setDateToDelete(null);
@@ -137,7 +148,9 @@ export default function Dashboard() {
               </button>
               <div className={styles.dailyTotals}>
                 {(() => {
-                  const { income, expense, rentPrice } = calculateDailyTotals(summaryData[latestDate]);
+                  const { income, expense, rentPrice } = calculateDailyTotals(
+                    summaryData[latestDate]
+                  );
                   const netProfit = income - expense - rentPrice;
                   return (
                     <>
@@ -163,19 +176,29 @@ export default function Dashboard() {
               </div>
               <div className={styles.marketDetails}>
                 {summaryData[latestDate].map((transaction, index) => {
-                  const totalExpense = transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0);
-                  const netProfit = transaction.transaction.income - transaction.transaction.rent_price - totalExpense;
+                  const totalExpense = transaction.transaction.Expense.reduce(
+                    (sum, e) => sum + e.amount,
+                    0
+                  );
+                  const netProfit =
+                    transaction.transaction.income -
+                    transaction.transaction.rent_price -
+                    totalExpense;
                   return (
                     <div key={index} className={styles.marketSummary}>
                       <h3>{transaction.market_name}</h3>
                       <div className={styles.marketInfo}>
                         <div>
                           <span>รายได้:</span>
-                          <strong>฿{transaction.transaction.income.toFixed(2)}</strong>
+                          <strong>
+                            ฿{transaction.transaction.income.toFixed(2)}
+                          </strong>
                         </div>
                         <div>
                           <span>ค่าเช่าที่:</span>
-                          <strong>฿{transaction.transaction.rent_price.toFixed(2)}</strong>
+                          <strong>
+                            ฿{transaction.transaction.rent_price.toFixed(2)}
+                          </strong>
                         </div>
                         <div>
                           <span>รายจ่าย:</span>
@@ -190,9 +213,13 @@ export default function Dashboard() {
                         <details className={styles.expenseDetails}>
                           <summary>รายละเอียดค่าใช้จ่าย</summary>
                           <ul>
-                            {transaction.transaction.Expense.map((expense, i) => (
-                              <li key={i}>{expense.name}: ฿{expense.amount.toFixed(2)}</li>
-                            ))}
+                            {transaction.transaction.Expense.map(
+                              (expense, i) => (
+                                <li key={i}>
+                                  {expense.name}: ฿{expense.amount.toFixed(2)}
+                                </li>
+                              )
+                            )}
                           </ul>
                         </details>
                       )}
@@ -219,8 +246,10 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {dates.slice(1).map(date => {
-                    const { income, expense, rentPrice } = calculateDailyTotals(summaryData[date]);
+                  {dates.slice(1).map((date) => {
+                    const { income, expense, rentPrice } = calculateDailyTotals(
+                      summaryData[date]
+                    );
                     const netProfit = income - expense - rentPrice;
                     return (
                       <React.Fragment key={date}>
@@ -231,8 +260,11 @@ export default function Dashboard() {
                           <td>฿{expense.toFixed(2)}</td>
                           <td>฿{netProfit.toFixed(2)}</td>
                           <td>
-                            <button className={styles.toggleBtn} onClick={() => toggleRow(date)}>
-                              {expandedRow === date ? 'ซ่อน' : 'แสดง'}
+                            <button
+                              className={styles.toggleBtn}
+                              onClick={() => toggleRow(date)}
+                            >
+                              {expandedRow === date ? "ซ่อน" : "แสดง"}
                             </button>
                           </td>
                           <td>
@@ -250,14 +282,61 @@ export default function Dashboard() {
                             <td colSpan={7} className={styles.expandedCell}>
                               <div className={styles.expandedContent}>
                                 {summaryData[date].map((transaction, index) => (
-                                  <div key={index} className={styles.expandedMarket}>
+                                  <div
+                                    key={index}
+                                    className={styles.expandedMarket}
+                                  >
                                     <h4>{transaction.market_name}</h4>
                                     <div className={styles.marketInfo}>
-                                      <p>รายได้: ฿{transaction.transaction.income.toFixed(2)}</p>
-                                      <p>ค่าเช่าที่: ฿{transaction.transaction.rent_price.toFixed(2)}</p>
-                                      <p>รายจ่าย: ฿{(transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
-                                      <p>กำไรสุทธิ: ฿{(transaction.transaction.income - transaction.transaction.rent_price - transaction.transaction.Expense.reduce((sum, e) => sum + e.amount, 0)).toFixed(2)}</p>
+                                      <p>
+                                        รายได้: ฿
+                                        {transaction.transaction.income.toFixed(
+                                          2
+                                        )}
+                                      </p>
+                                      <p>
+                                        ค่าเช่าที่: ฿
+                                        {transaction.transaction.rent_price.toFixed(
+                                          2
+                                        )}
+                                      </p>
+                                      <p>
+                                        รายจ่าย: ฿
+                                        {transaction.transaction.Expense.reduce(
+                                          (sum, e) => sum + e.amount,
+                                          0
+                                        ).toFixed(2)}
+                                      </p>
+                                      <p>
+                                        กำไรสุทธิ: ฿
+                                        {(
+                                          transaction.transaction.income -
+                                          transaction.transaction.rent_price -
+                                          transaction.transaction.Expense.reduce(
+                                            (sum, e) => sum + e.amount,
+                                            0
+                                          )
+                                        ).toFixed(2)}
+                                      </p>
                                     </div>
+                                    {transaction.transaction.Expense.length >
+                                      0 && (
+                                      <details
+                                        className={styles.expenseDetails}
+                                      >
+                                        <summary>รายละเอียดค่าใช้จ่าย</summary>
+                                        <ul>
+                                          {transaction.transaction.Expense.map(
+                                            (expense, i) => (
+                                              <li key={i}>
+                                                {expense.name}: ฿
+                                                {expense.amount.toFixed(2)}
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </details>
+                                    )}
                                   </div>
                                 ))}
                               </div>
