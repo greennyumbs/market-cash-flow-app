@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
 import { Expense } from '@/core/entities';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 interface Transaction {
   market_name: string;
@@ -24,8 +25,9 @@ export default function Dashboard() {
   const [summaryData, setSummaryData] = useState<DailySummary>({});
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [dateToDelete, setDateToDelete] = useState<string | null>(null);
 
-  // Moved fetchSummaryData outside useEffect for reuse
   const fetchSummaryData = async () => {
     setLoading(true);
     try {
@@ -74,36 +76,48 @@ export default function Dashboard() {
     setExpandedRow(expandedRow === date ? null : date);
   };
 
-  const handleDelete = async (date: string) => {
-    const formattedDate = formatDate(date, 'log');
+  const handleDeleteClick = (date: string) => {
+    setDateToDelete(date);
+    setShowDeleteModal(true);
+  };
 
-    console.log('formattedDate', formattedDate);
+  const handleDeleteConfirm = async () => {
+    if (dateToDelete) {
+      const formattedDate = formatDate(dateToDelete, 'log');
 
-    try {
-      const response = await fetch('/api/daily-transaction', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ created_at: formattedDate }),
-      });
+      try {
+        const response = await fetch('/api/daily-transaction', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ created_at: formattedDate }),
+        });
 
-      if (!response.ok) {
-        throw new Error('Error deleting daily transaction');
+        if (!response.ok) {
+          throw new Error('Error deleting daily transaction');
+        }
+
+        // Refetch the summary data after the successful deletion
+        await fetchSummaryData();
+      } catch (error) {
+        console.error('Error deleting transaction:', error);
+      } finally {
+        setShowDeleteModal(false);
+        setDateToDelete(null);
       }
-
-      // Refetch the summary data after the successful deletion
-      await fetchSummaryData();
-    } catch (error) {
-      console.error('Error deleting transaction:', error);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setDateToDelete(null);
   };
 
   return (
     <div className={styles.dashboard}>
       <h1>ข้อมูลสรุป</h1>
 
-      {/* Loading Screen */}
       {loading ? (
         <div className={styles.loadingContainer}>
           <div className={styles.spinner}></div>
@@ -116,7 +130,7 @@ export default function Dashboard() {
               <h2>สรุปรายการล่าสุด - {formatDate(latestDate)}</h2>
               <button
                 className={styles.deleteBtn}
-                onClick={() => handleDelete(latestDate)}
+                onClick={() => handleDeleteClick(latestDate)}
                 aria-label="Delete summary"
               >
                 <img src="/bin.png" alt="Delete" />
@@ -189,7 +203,6 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Conditionally render table section only if there are more than one date */}
           {dates.length > 1 && (
             <>
               <h2>รายการทั้งหมด</h2>
@@ -202,7 +215,7 @@ export default function Dashboard() {
                     <th>รายจ่ายรวม</th>
                     <th>กำไรสุทธิ</th>
                     <th>รายละเอียด</th>
-                    <th></th> {/* New column for delete button */}
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -225,7 +238,7 @@ export default function Dashboard() {
                           <td>
                             <div
                               className={styles.deleteBtn}
-                              onClick={() => handleDelete(date)}
+                              onClick={() => handleDeleteClick(date)}
                               aria-label="Delete entry"
                             >
                               <img src="/bin.png" alt="Delete" />
@@ -259,6 +272,14 @@ export default function Dashboard() {
             </>
           )}
         </>
+      )}
+
+      {showDeleteModal && dateToDelete && (
+        <DeleteConfirmationModal
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+          date={formatDate(dateToDelete)}
+        />
       )}
     </div>
   );
