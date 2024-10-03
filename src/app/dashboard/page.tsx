@@ -58,13 +58,13 @@ export default function Dashboard() {
     }
   };
 
-  const dates = Object.keys(summaryData).sort((a, b) => {
+  const sortedDates = Object.keys(summaryData).sort((a, b) => {
     const [dayA, monthA, yearA] = a.split('/').map(Number);
     const [dayB, monthB, yearB] = b.split('/').map(Number);
     return new Date(yearB, monthB - 1, dayB).getTime() - new Date(yearA, monthA - 1, dayA).getTime();
   });
   
-  const latestDate = dates[0];
+  const latestDate = sortedDates[0];
 
   const calculateDailyTotals = (transactions: Transaction[]) => {
     return transactions.reduce(
@@ -228,7 +228,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {dates.length > 1 && (
+          {sortedDates.length > 1 && (
             <>
               <h2>รายการทั้งหมด</h2>
               <table className={styles.table}>
@@ -244,7 +244,7 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {dates.slice(1).map((date) => {
+                  {sortedDates.slice(1).map((date) => {
                     const { income, expense, rentPrice } = calculateDailyTotals(
                       summaryData[date]
                     );
