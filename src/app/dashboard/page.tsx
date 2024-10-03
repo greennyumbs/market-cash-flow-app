@@ -101,6 +101,7 @@ export default function Dashboard() {
   const handleDeleteConfirm = async () => {
     if (dateToDelete) {
       const formattedDate = formatDate(dateToDelete, "log");
+      console.log("Deleting transaction for date:", formattedDate);
 
       try {
         const response = await fetch("/api/daily-transaction", {
