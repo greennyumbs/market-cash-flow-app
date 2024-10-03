@@ -47,14 +47,22 @@ export default function Dashboard() {
     fetchSummaryData();
   }, []);
 
-  const formatDate = (dateString: any, format = "display") => {
+  const formatDate = (dateString: string, format = "display") => {
     const [day, month, year] = dateString.split('/');
-    const date = new Date(year, month - 1, day); // month is 0-indexed in JS Date
+  
+    // Create the date with the correct format (yyyy, mm, dd)
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
   
     if (format === "log") {
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      // For logging: return yyyy-mm-dd
+      const localDay = String(date.getDate()).padStart(2, '0');
+      const localMonth = String(date.getMonth() + 1).padStart(2, '0'); // getMonth is 0-indexed
+      const localYear = date.getFullYear();
+      
+      return `${localYear}-${localMonth}-${localDay}`;
     } else {
-      return `${day}/${month}/${year.slice(-2)}`;
+      // For display: keep the original dd/mm/yyyy
+      return `${day}/${month}/${year}`;
     }
   };
 
