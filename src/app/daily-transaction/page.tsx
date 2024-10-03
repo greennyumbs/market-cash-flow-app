@@ -58,7 +58,7 @@ export default function DailyTransaction() {
 
   return (
     <div className={styles.dailyTransaction}>
-      <h1>บันทึกรายจ่ายวันนี้ ({currentDate})</h1>
+      <h1>บันทึกรายจ่าย</h1>
       {markets && <DailyTransactionForm markets={markets} />}
     </div>
   );
