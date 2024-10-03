@@ -47,25 +47,23 @@ export default function Dashboard() {
     fetchSummaryData();
   }, []);
 
-  const formatDate = (
-    dateString: string,
-    format: "display" | "log" = "display"
-  ) => {
-    const date = new Date(dateString);
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-
+  const formatDate = (dateString: any, format = "display") => {
+    const [day, month, year] = dateString.split('/');
+    const date = new Date(year, month - 1, day); // month is 0-indexed in JS Date
+  
     if (format === "log") {
-      return `${yyyy}-${mm}-${dd}`;
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     } else {
-      return `${dd}/${mm}/${yyyy.toString().slice(-2)}`;
+      return `${day}/${month}/${year.slice(-2)}`;
     }
   };
 
-  const dates = Object.keys(summaryData).sort(
-    (a, b) => new Date(b).getTime() - new Date(a).getTime()
-  );
+  const dates = Object.keys(summaryData).sort((a, b) => {
+    const [dayA, monthA, yearA] = a.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.split('/').map(Number);
+    return new Date(yearB, monthB - 1, dayB).getTime() - new Date(yearA, monthA - 1, dayA).getTime();
+  });
+  
   const latestDate = dates[0];
 
   const calculateDailyTotals = (transactions: Transaction[]) => {
