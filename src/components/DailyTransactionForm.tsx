@@ -36,14 +36,23 @@ export default function DailyTransactionForm({
 
   function getCurrentDate() {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    // Create a new date object adjusted to UTC+7
+    const utc7Date = new Date(today.getTime() + 7 * 60 * 60 * 1000);
+    const year = utc7Date.getFullYear();
+    const month = String(utc7Date.getMonth() + 1).padStart(2, '0');
+    const day = String(utc7Date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
+  
+  // Update the date change handler to set the selected date correctly
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(e.target.value);
+    const selectedDate = new Date(e.target.value);
+    // Adjust to UTC+7
+    const utc7Date = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+    const year = utc7Date.getFullYear();
+    const month = String(utc7Date.getMonth() + 1).padStart(2, '0');
+    const day = String(utc7Date.getDate()).padStart(2, '0');
+    setSelectedDate(`${year}-${month}-${day}`);
   };
 
   const handleRentPriceChange = (index: number, value: string) => {
