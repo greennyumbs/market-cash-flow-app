@@ -4,6 +4,32 @@
   font-family: 'Sarabun', sans-serif;
 }
 
+.datePickerContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.datePickerContainer label {
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.datePicker {
+  padding: 0.5rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 1rem;
+}
+
+.datePicker:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
 .form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -15,15 +41,15 @@
 }
 
 .marketForm {
-  position: relative; /* Make the market form container a positioned element */
+  position: relative;
   background-color: white;
   border: 1px solid #e8e8e8;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-  width: 100%; /* Ensure full width within the grid column */
-  box-sizing: border-box; /* Include padding and border in the element's width and height */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .marketForm:hover {
@@ -130,7 +156,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   background-color: #f0f2f5;
 }
 
@@ -149,9 +175,8 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Stack forms on smaller screens */
 @media (max-width: 1000px) {
   .form {
-    grid-template-columns: 1fr; /* Single column on small screens */
+    grid-template-columns: 1fr;
   }
 }

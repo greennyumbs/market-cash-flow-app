@@ -19,7 +19,7 @@ export class DailyTransactionUseCases {
   ) {}
 
   public async createDailyTransaction(
-    req: CreateDailyTransaction[]
+    req: CreateDailyTransaction
   ): Promise<any> {
     try {
       const results = await this.upsertTransaction(req);
@@ -43,24 +43,28 @@ export class DailyTransactionUseCases {
   }
 
   private async upsertTransaction(
-    req: CreateDailyTransaction[]
+    req: CreateDailyTransaction
   ): Promise<{ expenseAdded: any[]; transactionAdded: any[] }> {
     const results: { expenseAdded: any[]; transactionAdded: any[] } = {
       expenseAdded: [],
       transactionAdded: [],
     };
-
+  
     try {
-      for (const transactionRequest of req) {
+      // Parse the date string and create a Date object in local time (UTC+7)
+      const [year, month, day] = req.date.split('-').map(Number);
+      const localDate = new Date(year, month - 1, day + 1);
+  
+      for (const transactionRequest of req.transactions) {
         const { income, rentPrice, marketId, expense } = transactionRequest;
-
+  
         // Create transaction
         const transaction = { income, rentPrice };
         const { transactionData } = await this.transactionRepository.create(
           transaction
         );
         const transactionId = Number(transactionData[0].id);
-
+  
         // Map and insert expenses
         const transactionExpenseMapping = expense.map(
           ({ name, amount }: Expense) => ({
@@ -69,23 +73,23 @@ export class DailyTransactionUseCases {
             amount,
           })
         );
-
+  
         await this.insertTransactionExpenseMapping(transactionExpenseMapping);
-
+  
         // Create Daily Transaction Market
         const dailyTransactionMarket: DailyTransactionMarket = {
           transactionId,
           marketId,
-          createdAt: this.getCurrentDateWithoutTime(),
+          createdAt: localDate.toISOString().split('T')[0], // Use the local date
         };
-
+  
         const { dailyTransactionData } =
           await this.insertDailyTransactionMarket(dailyTransactionMarket);
-
+  
         results.transactionAdded.push(dailyTransactionData);
         results.expenseAdded.push(transactionExpenseMapping);
       }
-
+  
       return results;
     } catch (error) {
       console.error("Failed to upsert transactions:", error);

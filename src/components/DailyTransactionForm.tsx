@@ -32,6 +32,19 @@ export default function DailyTransactionForm({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
 
   const handleRentPriceChange = (index: number, value: string) => {
     const newTransactions = [...transactions];
@@ -89,18 +102,23 @@ export default function DailyTransactionForm({
   };
 
   const confirmSubmit = async () => {
-    setLoading(true); // Start loading
-    setShowModal(false); // Hide confirmation modal
-
+    setLoading(true);
+    setShowModal(false);
+  
     try {
+      const requestBody = {
+        date: selectedDate,
+        transactions: transactions
+      };
+  
       const response = await fetch("/api/daily-transaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(transactions),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) throw new Error("Failed to submit daily transaction");
-
-      // Reset the form after successful submission
+  
+      // Reset form after successful submission
       setTransactions(
         markets.map((market) => ({
           marketId: market.id,
@@ -112,7 +130,7 @@ export default function DailyTransactionForm({
     } catch (error) {
       console.error("Error submitting daily transaction:", error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -127,6 +145,18 @@ export default function DailyTransactionForm({
 
   return (
     <form className={styles.formContainer} onSubmit={handleSubmit}>
+      <div className={styles.datePickerContainer}>
+        <label htmlFor="transactionDate">วันที่ทำรายการ:</label>
+        <input
+          type="date"
+          id="transactionDate"
+          value={selectedDate}
+          onChange={handleDateChange}
+          max={getCurrentDate()}
+          required
+          className={styles.datePicker}
+        />
+      </div>
       <div className={styles.form}>
         {transactions.map((transaction, index) => (
           <div key={transaction.marketId} className={styles.marketForm}>

@@ -1,6 +1,10 @@
 import { Expense } from '../entities/Expense';
 
 export interface CreateDailyTransaction {
+  date: string;
+  transactions: CreateDailyTransactionData[];
+}
+export interface CreateDailyTransactionData {
   marketId: number;
   income: number;
   rentPrice: number;
