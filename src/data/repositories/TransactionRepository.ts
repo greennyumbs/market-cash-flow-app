@@ -1,5 +1,5 @@
 import { Transaction } from '@/core/entities/Transaction';
-import { CreateDailyTransaction } from '@/core/interface/create-daily-transaction.interface';
+import { CreateDailyTransactionData } from '@/core/interface/create-daily-transaction.interface';
 import { TransactionRepository } from '@/core/use-cases/transactionUseCases';
 import { supabase } from '@/infrastructure/database/supabase';
 
