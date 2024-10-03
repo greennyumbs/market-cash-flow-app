@@ -53,7 +53,7 @@ export class DailyTransactionUseCases {
     try {
       // Parse the date string and create a Date object in local time (UTC+7)
       const [year, month, day] = req.date.split('-').map(Number);
-      const localDate = new Date(year, month - 1, day + 1);
+      const localDate = new Date(year, month - 1, day);
   
       for (const transactionRequest of req.transactions) {
         const { income, rentPrice, marketId, expense } = transactionRequest;
