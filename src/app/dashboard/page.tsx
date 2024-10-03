@@ -100,22 +100,30 @@ export default function Dashboard() {
 
   const handleDeleteConfirm = async () => {
     if (dateToDelete) {
-      const formattedDate = formatDate(dateToDelete, "log");
+      // Convert dateToDelete string to a Date object
+      const date = new Date(dateToDelete); // Ensure dateToDelete is in a valid date format (e.g., "YYYY-MM-DD")
+      
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+      const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
+  
+      // Format date as yyyy-mm-dd
+      const formattedDate = `${year}-${month}-${day}`;
       console.log("Deleting transaction for date:", formattedDate);
-
+  
       try {
         const response = await fetch("/api/daily-transaction", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ created_at: formattedDate }),
+          body: JSON.stringify({ created_at: formattedDate }), // Send as yyyy-mm-dd
         });
-
+  
         if (!response.ok) {
           throw new Error("Error deleting daily transaction");
         }
-
+  
         // Refetch the summary data after the successful deletion
         await fetchSummaryData();
       } catch (error) {
